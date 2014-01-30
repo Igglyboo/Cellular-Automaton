@@ -3,10 +3,10 @@ import numpy
 from itertools import cycle
 from pyglet.window import key, mouse
 
-window_width = 1000
+window_width = 700
 window_height = 700
 
-cell_size = 100
+cell_size = 10
 cells_high = window_height / cell_size
 cells_wide = window_width / cell_size
 
@@ -47,8 +47,21 @@ def on_key_press(symbol, modifiers):
 
 @window.event
 def on_mouse_press(x, y, button, modifiers):
-    if button == mouse.LEFT and paused:
-        grid[x/cell_size][y/cell_size] = not grid[x/cell_size][y/cell_size]
+    if paused:
+        if button == mouse.LEFT:
+            grid[x/cell_size][y/cell_size] = 1
+        elif button == mouse.RIGHT:
+            grid[x/cell_size][y/cell_size] = 0
+            
+
+@window.event
+def on_mouse_drag(x, y, dx, dy, buttons, modifiers):
+    if paused:
+        if 0 <= x / cell_size < cells_wide and 0 <= y / cell_size < cells_high:
+            if buttons == mouse.LEFT:
+                grid[x/cell_size][y/cell_size] = 1
+            elif buttons == mouse.RIGHT:
+                grid[x/cell_size][y/cell_size] = 0
 
 
 def update(dt):
